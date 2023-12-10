@@ -1,5 +1,3 @@
-'''methods file'''
-
 from random import randint
 
 
@@ -16,7 +14,7 @@ class Methods:
         return json
 
 
-    async def IsExistUsername(self, username: str) -> dict:
+    async def isExistUsername(self, username: str) -> dict:
         json = self.makeJson(
             'isExistUsername',
             {
@@ -25,7 +23,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetPostByShareLink(self, share_link: str, profile_id: str = None) -> dict:
+    async def getPostByShareLink(self, share_link: str, profile_id: str = None) -> dict:
         json = self.makeJson(
             'getPostByShareLink',
             {
@@ -35,7 +33,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetProfileList(self, limit: int = 10, sort: str = 'FromMax', equal: bool = False) -> dict:
+    async def getProfileList(self, limit: int = 10, sort: str = 'FromMax', equal: bool = False) -> dict:
         json = self.makeJson(
             'getProfileList',
             {
@@ -47,7 +45,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetProfileInfo(self, profile_id: str):
+    async def getProfileInfo(self, profile_id: str):
         json = self.makeJson(
             'getMyProfileInfo',
             {
@@ -56,7 +54,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def Follow(self, followee_id: str, profile_id: str = None) -> dict:
+    async def _follow(self, followee_id: str, profile_id: str = None) -> dict:
         json = self.makeJson(
             'requestFollow',
             {
@@ -67,7 +65,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def UnFollow(self, followee_id: str, profile_id: str = None) -> dict:
+    async def unFollow(self, followee_id: str, profile_id: str = None) -> dict:
         json = self.makeJson(
             'requestFollow',
             {
@@ -78,12 +76,12 @@ class Methods:
         return self.post(json=json)
 
 
-    async def CreatePage(self, **kwargs) -> dict:
+    async def createPage(self, **kwargs) -> dict:
         json = self.makeJson('createPage', {**kwargs})
         return self.post(json=json)
 
 
-    async def RemovePage(self, profile_id: str, record_id: str) -> dict:
+    async def removePage(self, profile_id: str, record_id: str) -> dict:
         json = self.makeJson(
             'removeRecord',
             {
@@ -94,12 +92,12 @@ class Methods:
         return self.post(json=json)
 
 
-    async def UpdateProfile(self, **kwargs) -> dict:
+    async def updateProfile(self, **kwargs) -> dict:
         json = self.makeJson('updateProfile', {**kwargs})
         return self.post(json=json)
 
 
-    async def AddComment(
+    async def addComment(
             self,
             text: str,
             post_id: str,
@@ -118,7 +116,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def Like(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
+    async def _like(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
         json = self.makeJson(
             'likePostAction',
             {
@@ -130,7 +128,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def UnLike(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
+    async def unLike(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
         json = self.makeJson(
             'likePostAction',
             {
@@ -142,7 +140,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def View(self, post_id: str, post_profile_id: str) -> dict:
+    async def _view(self, post_id: str, post_profile_id: str) -> dict:
         json = self.makeJson(
             'addPostViewCount',
             {
@@ -152,7 +150,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetComments(
+    async def getComments(
             self,
             post_id: str,
             post_profile_id: str,
@@ -174,7 +172,7 @@ class Methods:
         return self.post(json=json)
 
     #
-    async def GetProfilePosts(
+    async def getProfilePosts(
             self,
             target_profile_id: str,
             profile_id: str = None,
@@ -194,7 +192,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetProfilesStories(self, profile_id: str, limit: int = 100) -> dict:
+    async def getProfilesStories(self, profile_id: str, limit: int = 100) -> dict:
         json = self.makeJson(
             'getProfilesStories',
             {
@@ -204,7 +202,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetRecentFollowingPosts(
+    async def getRecentFollowingPosts(
             self,
             profile_id: str,
             limit: int = 30,
@@ -222,27 +220,7 @@ class Methods:
         return self.post(json=json)
 
 
-
-
-    async def RequestUpLoadFile(
-            self,
-            profile_id: str,
-            file_name: str,
-            file_size: int,
-            file_type: str
-    ) -> dict:
-        json = self.makeJson(
-            'requestUploadFile',
-            {
-              'file_name': file_name.split('/')[-1],
-              'file_size': file_size,
-              'file_type': file_type,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
-
-
-    async def GetBookmarkedPosts(
+    async def getBookmarkedPosts(
             self,
             profile_id: str,
             limit: int = 50,
@@ -260,7 +238,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetExplorePosts(
+    async def getExplorePosts(
             self,
             profile_id: str,
             limit: int = 50,
@@ -280,7 +258,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetBlockedProfiles(
+    async def getBlockedProfiles(
             self,
             profile_id: str,
             limit: int = 50,
@@ -298,7 +276,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetProfileFollowers(
+    async def getProfileFollowers(
             self,
             profile_id: str,
             target_profile_id: str,
@@ -319,7 +297,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def GetProfileFollowings(
+    async def getProfileFollowings(
             self,
             profile_id: str,
             target_profile_id: str,
@@ -340,7 +318,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def BlockProfile(self, profile_id: str, blocked_id: str) -> dict:
+    async def blockProfile(self, profile_id: str, blocked_id: str) -> dict:
         json = self.makeJson(
             'setBlockProfile',
              {
@@ -351,7 +329,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def UnBlockProfile(self, profile_id: str, blocked_id: str) -> dict:
+    async def unBlockProfile(self, profile_id: str, blocked_id: str) -> dict:
         json = self.makeJson(
             'setBlockProfile',
              {
@@ -361,8 +339,8 @@ class Methods:
                })
         return self.post(json=json)
 
-
-    async def AddPost(
+    
+    async def addPost(
             self,
             profile_id: str,
             file: str,

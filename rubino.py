@@ -3,6 +3,8 @@
 from requests import session
 from random import randint
 
+from methods import Methods
+
 
 class BaseMethod:
     client: dict = {
@@ -46,72 +48,27 @@ class Client(BaseMethod):
 
 
     async def get_post_by_share_link(self, share_link: str, profile_id: str = None) -> dict:
-        json = self.makeJson(
-            'getPostByShareLink',
-            {
-              'share_string': share_link.split('/')[-1],
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
-
+        return await Methods.GetPostByShareLink(self, share_link, profile_id)
 
 
     async def is_exist_username(self, username: str) -> dict:
-        json = self.makeJson(
-            'isExistUsername',
-            {
-                'username': username.split('@')[-1]
-            })
-        return self.post(json=json)
+        return await Methods.IsExistUsername(self, username)
 
 
-
-    async def get_profile_list(
-            self,
-            limit: int = 10,
-            sort: str = 'FromMax',
-            equal: bool = False
-    ) -> dict:
-        json = self.makeJson(
-            'getProfileList',
-            {
-                'limit': limit,
-                'sort': sort,
-                'equal': equal
-            }
-        )
-        return self.post(json=json)
+    async def get_profile_list(self, limit: int = 10, sort: str = 'FromMax', equal: bool = False) -> dict:
+        return await Methods.GetProfileList(self, limit, sort, equal)
 
 
-    async def get_profile_info(self, target_profile_id: str):
-        json = self.makeJson(
-            'getMyProfileInfo',
-            {
-                'profile_id': target_profile_id
-            })
-        return self.post(json=json)
+    async def get_profile_info(self, profile_id: str):
+        return await Methods.GetProfileInfo(self, profile_id)
 
 
     async def follow(self, followee_id: str, profile_id: str = None) -> dict:
-        json = self.makeJson(
-            'requestFollow',
-            {
-              'f_type':'Follow',
-              'followee_id': followee_id,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.Follow(self, followee_id, profile_id)
 
 
     async def unfollow(self, followee_id: str, profile_id: str = None) -> dict:
-        json = self.makeJson(
-            'requestFollow',
-            {
-                'f_type': 'Unfollow',
-                'followee_id': followee_id,
-                'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.UnFollow(self, followee_id, profile_id)
 
 
     async def create_page(self, **kwargs) -> dict:
@@ -122,19 +79,11 @@ class Client(BaseMethod):
             email='',phone='',
             website=''
             )'''
-        json = self.makeJson('createPage', {**kwargs})
-        return self.post(json=json)
+        return await Methods.CreatePage(self, **kwargs)
 
 
     async def remove_page(self, profile_id: str, record_id: str) -> dict:
-        json = self.makeJson(
-            'removeRecord',
-            {
-             'model': 'Profile',
-             'record_id': record_id,
-             'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.RemovePage(self, profile_id, record_id)
 
 
     async def update_profile(self, **kwargs) -> dict:
@@ -149,8 +98,7 @@ class Client(BaseMethod):
             is_mute=True or False,
             profile_status='Public' or 'Private'
             )'''
-        json = self.makeJson('updateProfile', {**kwargs})
-        return self.post(json=json)
+        return await Methods.UpdateProfile(self, **kwargs)
 
 
     async def add_comment(
@@ -160,50 +108,19 @@ class Client(BaseMethod):
             post_profile_id: str,
             profile_id: str = None
     ) -> dict:
-        json = self.makeJson(
-            'addComment',
-            {
-              'content': text,
-              'post_id': post_id,
-              'post_profile_id': post_profile_id,
-              'rnd': randint(100000000, 999999999),
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.AddComment(self, text, post_id, post_profile_id, profile_id)
 
 
     async def like(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
-        json = self.makeJson(
-            'likePostAction',
-            {
-              'action_type': 'Like',
-              'post_id': post_id,
-              'post_profile_id': post_profile_id,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.Like(self, post_id, post_profile_id, profile_id)
 
 
     async def unlike(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
-        json = self.makeJson(
-            'likePostAction',
-            {
-              'action_type': 'Unlike',
-              'post_id': post_id,
-              'post_profile_id': post_profile_id,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.UnLike(self, post_id, post_profile_id, profile_id)
 
 
     async def view(self, post_id: str, post_profile_id: str) -> dict:
-        json = self.makeJson(
-            'addPostViewCount',
-            {
-              'post_id': post_id,
-              'post_profile_id': post_profile_id
-            })
-        return self.post(json=json)
+        return await Methods.View(self, post_id, post_profile_id)
 
 
     async def get_comments(
@@ -215,17 +132,7 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        json = self.makeJson(
-            'getComments',
-            {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'post_id': post_id,
-              'profile_id': profile_id,
-              'post_profile_id': post_profile_id
-            })
-        return self.post(json=json)
+        return await Methods.GetComments(self, post_id, post_profile_id, profile_id, sort, limit, equal)
 
 
     async def get_profile_posts(
@@ -236,26 +143,11 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        json = self.makeJson(
-            'getRecentFollowingPosts',
-            {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id,
-              'target_profile_id': target_profile_id
-            })
-        return self.post(json=json)
+        return await Methods.GetProfilePosts(self, target_profile_id, profile_id, limit, sort, equal)
 
 
     async def get_profiles_stories(self, profile_id: str, limit: int = 100) -> dict:
-        json = self.makeJson(
-            'getProfilesStories',
-            {
-              'limit': limit,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.GetProfilesStories(self, profile_id, limit)
 
 
     async def get_recent_following_posts(
@@ -265,15 +157,8 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        json = self.makeJson(
-            'getRecentFollowingPosts',
-            {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.GetRecentFollowingPosts(self, profile_id, limit, sort, equal)
+
 
 
     async def request_up_load_file(
@@ -283,35 +168,7 @@ class Client(BaseMethod):
             file_size: int,
             file_type: str
     ) -> dict:
-        json = self.makeJson(
-            'requestUploadFile',
-            {
-              'file_name': file_name.split('/')[-1],
-              'file_size': file_size,
-              'file_type': file_type,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
-
-
-    async def get_profile_high_lights(
-            self,
-            profile_id: str,
-            target_profile_id: str,
-            limit: int = 10,
-            sort: str = 'FromMax',
-            equal: bool = False
-    ) -> dict:
-        json = self.makeJson(
-            'getProfileHighlights',
-            {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'target_profile_id': target_profile_id,
-              'profile_id': profile_id
-              })
-        return self.post(json=json)
+        return Methods.RequestUpLoadFile(self, profile_id, file_name, file_size, file_type)
 
 
     async def get_bookmarked_posts(
@@ -321,15 +178,8 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        json = self.makeJson(
-            'getBookmarkedPosts',
-            {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id
-              })
-        return self.post(json=json)
+        return await Methods.GetBookmarkedPosts(self, profile_id, limit, sort, equal)
+
 
 
     async def get_explore_posts(
@@ -340,16 +190,8 @@ class Client(BaseMethod):
             equal: bool = False,
             max_id: str = None
     ) -> dict:
-        json = self.makeJson(
-            'getExplorePosts',
-            {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'max_id': max_id,
-              'profile_id': profile_id
-              })
-        return self.post(json=json)
+        return await Methods.GetExplorePosts(self, profile_id, limit, sort, equal, max_id)
+
 
 
     async def get_blocked_profiles(
@@ -359,15 +201,8 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        json = self.makeJson(
-            'getBlockedProfiles',
-            {
-             'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.GetBlockedProfiles(self, profile_id, limit, sort, equal)
+
 
 
     async def get_profile_followers(
@@ -378,17 +213,7 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        json = self.makeJson(
-            'getProfileFollowers',
-             {
-               'equal': equal,
-               'f_type': 'Follower',
-               'limit': limit,
-               'sort': sort,
-               'target_profile_id': target_profile_id,
-               'profile_id': profile_id
-             })
-        return self.post(json=json)
+        return await Methods.GetProfileFollowers(self, profile_id, target_profile_id, limit, sort, equal)
 
 
     async def get_profile_followings(
@@ -399,67 +224,15 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        json = self.makeJson(
-            'getProfileFollowers',
-             {
-               'equal': equal,
-               'f_type': 'Following',
-               'limit': limit,
-               'sort': sort,
-               'target_profile_id': target_profile_id,
-               'profile_id': profile_id
-             })
-        return self.post(json=json)
-
-
-    async def get_profile_info(self, profile_id: str, target_profile_id: str) -> dict:
-        json = self.makeJson(
-            'getProfileInfo',
-            {
-              'profile_id': profile_id,
-              'target_profile_id': target_profile_id
-            })
-        return self.post(json=json)
+        return await Methods.GetProfileFollowings(self, profile_id, target_profile_id, limit, sort, equal)
 
 
     async def block_profile(self, profile_id: str, blocked_id: str) -> dict:
-        json = self.makeJson(
-            'setBlockProfile',
-             {
-               'action':'Block',
-               'blocked_id': blocked_id,
-               'profile_id': profile_id
-               })
-        return self.post(json=json)
+        return await Methods.BlockProfile(self, profile_id, blocked_id)
 
 
     async def un_block_profile(self, profile_id: str, blocked_id: str) -> dict:
-        json = self.makeJson(
-            'setBlockProfile',
-             {
-               'action': 'Unblock',
-               'blocked_id': blocked_id,
-               'profile_id': profile_id
-               })
-        return self.post(json=json)
-
-
-    async def get_my_archive_atories(
-            self,
-            profile_id: str,
-            limit: int = 50,
-            sort: str = 'FromMax',
-            equal: bool = False
-    ) -> dict:
-        json = self.makeJson(
-            'getMyArchiveStories',
-            {
-             'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id
-            })
-        return self.post(json=json)
+        return await Methods.UnBlockProfile(self, profile_id, blocked_id)
 
 
     async def add_post(
@@ -469,18 +242,4 @@ class Client(BaseMethod):
             caption: str = None,
             file_type: str = BaseMethod.picture
     ) -> dict:
-        result = self.uploadFile(file, profile_id, file_type)
-        json = self.makeJson('addPost', {
-            'rnd': int(random() * 1e6 + 1),
-            'width': 720,
-            'height': 720,
-            'caption': caption,
-            'file_id': result[1]['file_id'],
-            'post_type': file_type,
-            'profile_id': profile_id,
-            'hash_file_receive': result[0]['hash_file_receive'],
-            'thumbnail_file_id': result[1]['file_id'],
-            'thumbnail_hash_file_receive': result[0]['hash_file_receive'],
-            'is_multi_file': False
-            })
-        return self.post(json=json)
+        return await Methods.AddPost(self, profile_id, file, caption, file_type)

@@ -1,4 +1,5 @@
 from random import randint
+import os
 
 
 class Methods:
@@ -8,6 +9,24 @@ class Methods:
             'isExistUsername',
             {
                 'username': username.split('@')[-1]
+            })
+        return self.post(json=json)
+
+
+    async def _get_my_archive_atories(
+            self,
+            profile_id: str = None,
+            limit: int = 50,
+            sort: str = 'FromMax',
+            equal: bool = False
+    ) -> dict:
+        json = self.makeJson(
+            'getMyArchiveStories',
+            {
+                'equal': equal,
+                'limit': limit,
+                'sort': sort,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -22,28 +41,21 @@ class Methods:
         return self.post(json=json)
 
 
-    async def _get_me(
-            self,
-            limit: int = 10,
-            sort: str = 'FromMax',
-            equal: bool = False
-    ) -> dict:
+    async def _get_profile_info(self, target_profile_id: str, profile_id: str = None) -> dict:
         json = self.makeJson(
-            'getProfileList',
+            'getProfileInfo',
             {
-                'limit': limit,
-                'sort': sort,
-                'equal': equal
-            }
-        )
+                'profile_id': profile_id,
+                'target_profile_id': target_profile_id
+            })
         return self.post(json=json)
 
 
-    async def _get_profile_info(self, profile_id: str):
+    async def _get_me(self, profile_id: str) -> dict:
         json = self.makeJson(
             'getMyProfileInfo',
             {
-                'profile_id': profile_id
+              'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -331,4 +343,62 @@ class Methods:
                 'blocked_id': blocked_id,
                 'profile_id': profile_id
                })
+        return self.post(json=json)
+
+
+    async def _request_upload_file(
+            self,
+            profile_id: str,
+            file_name: str,
+            file_size: int,
+            file_type: str
+    ) -> dict:
+        json = self.makeJson(
+            'requestUploadFile',
+            {
+                'file_name': file_name.split('/')[-1],
+                'file_size': file_size,
+                'file_type': file_type,
+                'profile_id': profile_id
+            })
+        return self.post(json=json)
+
+
+    async def _upload_file(self, file: str, profile_id: str, file_type: str) -> dict:
+        filename, filesize = file.split('/')[-1], os.path.getsize(file)
+        result = await self.request_upload_file(profile_id, filename, filesize, file_type)
+        ByteFile = open(file, 'rb').read()
+        headers = {
+            'auth': self.auth,
+            'file-id': result['data']['file_id'],
+            'chunk-size': str(len(ByteFile)),
+            'total-part': '1',
+            'part-number': '1',
+            'hash-file-request': result['data']['hash_file_request']
+        }
+        return self.session.post(
+            result['data']['server_url'], data=ByteFile, headers=headers).json()['data'], result['data']
+
+
+    async def _add_post(
+            self,
+            profile_id: str,
+            file: str,
+            caption: str = None,
+            file_type: str = 'Picture'
+    ) -> dict:
+        result = await self.upload_file(file, file_type, profile_id)
+        json = self.makeJson('addPost', {
+            'rnd': int(randint(0, 9)),
+            'width': 720,
+            'height': 720,
+            'caption': caption,
+            'file_id': result[1]['file_id'],
+            'post_type': file_type,
+            'profile_id': profile_id,
+            'hash_file_receive': result[0]['hash_file_receive'],
+            'thumbnail_file_id': result[1]['file_id'],
+            'thumbnail_hash_file_receive': result[0]['hash_file_receive'],
+            'is_multi_file': False
+            })
         return self.post(json=json)

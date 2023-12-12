@@ -19,5 +19,5 @@ run(main())
 
 # Install
 ```bash
-pip install https://github.com/activate-sh/Rubino/archive/refs/tags/rubino-v1.3.zip
+pip install rubinobot
 ```

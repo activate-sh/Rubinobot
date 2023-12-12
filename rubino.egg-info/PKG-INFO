@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: rubino
-Version: 1.2
+Version: 1.3
 Summary: none
 Home-page: https://github.com/activate-sh
 Author: Amirali Irvany
@@ -11,3 +11,5 @@ Classifier: License :: OSI Approved :: MIT License
 Requires-Python: ~=3.6
 Description-Content-Type: text/markdown
 License-File: LICENSE
+
+# rubino

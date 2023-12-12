@@ -3,6 +3,7 @@ README.md
 setup.py
 rubino/__init__.py
 rubino/client.py
+rubino/main.py
 rubino/methods.py
 rubino.egg-info/PKG-INFO
 rubino.egg-info/SOURCES.txt

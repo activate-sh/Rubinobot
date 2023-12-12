@@ -3,17 +3,6 @@ from random import randint
 
 class Methods:
 
-    def makeJson(self, method: str, data: dict) -> dict:
-        json = {
-            'api_version': '0',
-            'auth': self.auth,
-            'client': self.client,
-            'data': data,
-            'method': method
-        }
-        return json
-
-
     async def _is_exist_username(self, username: str) -> dict:
         json = self.makeJson(
             'isExistUsername',
@@ -27,13 +16,18 @@ class Methods:
         json = self.makeJson(
             'getPostByShareLink',
             {
-              'share_string': share_link.split('/')[-1],
-              'profile_id': profile_id
+                'share_string': share_link.split('/')[-1],
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
 
-    async def _get_profile_list(self, limit: int = 10, sort: str = 'FromMax', equal: bool = False) -> dict:
+    async def _get_me(
+            self,
+            limit: int = 10,
+            sort: str = 'FromMax',
+            equal: bool = False
+    ) -> dict:
         json = self.makeJson(
             'getProfileList',
             {
@@ -58,9 +52,9 @@ class Methods:
         json = self.makeJson(
             'requestFollow',
             {
-              'f_type':'Follow',
-              'followee_id': followee_id,
-              'profile_id': profile_id
+                'f_type':'Follow',
+                'followee_id': followee_id,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -85,9 +79,9 @@ class Methods:
         json = self.makeJson(
             'removeRecord',
             {
-             'model': 'Profile',
-             'record_id': record_id,
-             'profile_id': profile_id
+                'model': 'Profile',
+                'record_id': record_id,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -107,11 +101,11 @@ class Methods:
         json = self.makeJson(
             'addComment',
             {
-              'content': text,
-              'post_id': post_id,
-              'post_profile_id': post_profile_id,
-              'rnd': randint(100000000, 999999999),
-              'profile_id': profile_id
+                'content': text,
+                'post_id': post_id,
+                'post_profile_id': post_profile_id,
+                'rnd': randint(100000000, 999999999),
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -120,10 +114,10 @@ class Methods:
         json = self.makeJson(
             'likePostAction',
             {
-              'action_type': 'Like',
-              'post_id': post_id,
-              'post_profile_id': post_profile_id,
-              'profile_id': profile_id
+                'action_type': 'Like',
+                'post_id': post_id,
+                'post_profile_id': post_profile_id,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -132,10 +126,10 @@ class Methods:
         json = self.makeJson(
             'likePostAction',
             {
-              'action_type': 'Unlike',
-              'post_id': post_id,
-              'post_profile_id': post_profile_id,
-              'profile_id': profile_id
+                'action_type': 'Unlike',
+                'post_id': post_id,
+                'post_profile_id': post_profile_id,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -144,8 +138,8 @@ class Methods:
         json = self.makeJson(
             'addPostViewCount',
             {
-              'post_id': post_id,
-              'post_profile_id': post_profile_id
+                'post_id': post_id,
+                'post_profile_id': post_profile_id
             })
         return self.post(json=json)
 
@@ -162,12 +156,12 @@ class Methods:
         json = self.makeJson(
             'getComments',
             {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'post_id': post_id,
-              'profile_id': profile_id,
-              'post_profile_id': post_profile_id
+                'equal': equal,
+                'limit': limit,
+                'sort': sort,
+                'post_id': post_id,
+                'profile_id': profile_id,
+                'post_profile_id': post_profile_id
             })
         return self.post(json=json)
 
@@ -183,11 +177,11 @@ class Methods:
         json = self.makeJson(
             'getRecentFollowingPosts',
             {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id,
-              'target_profile_id': target_profile_id
+                'equal': equal,
+                'limit': limit,
+                'sort': sort,
+                'profile_id': profile_id,
+                'target_profile_id': target_profile_id
             })
         return self.post(json=json)
 
@@ -196,8 +190,8 @@ class Methods:
         json = self.makeJson(
             'getProfilesStories',
             {
-              'limit': limit,
-              'profile_id': profile_id
+                'limit': limit,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -212,10 +206,10 @@ class Methods:
         json = self.makeJson(
             'getRecentFollowingPosts',
             {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id
+                'equal': equal,
+                'limit': limit,
+                'sort': sort,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -230,10 +224,10 @@ class Methods:
         json = self.makeJson(
             'getBookmarkedPosts',
             {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id
+                'equal': equal,
+                'limit': limit,
+                'sort': sort,
+                'profile_id': profile_id
               })
         return self.post(json=json)
 
@@ -249,11 +243,11 @@ class Methods:
         json = self.makeJson(
             'getExplorePosts',
             {
-              'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'max_id': max_id,
-              'profile_id': profile_id
+                'equal': equal,
+                'limit': limit,
+                'sort': sort,
+                'max_id': max_id,
+                'profile_id': profile_id
               })
         return self.post(json=json)
 
@@ -268,10 +262,10 @@ class Methods:
         json = self.makeJson(
             'getBlockedProfiles',
             {
-             'equal': equal,
-              'limit': limit,
-              'sort': sort,
-              'profile_id': profile_id
+                'equal': equal,
+                'limit': limit,
+                'sort': sort,
+                'profile_id': profile_id
             })
         return self.post(json=json)
 
@@ -287,12 +281,12 @@ class Methods:
         json = self.makeJson(
             'getProfileFollowers',
              {
-               'equal': equal,
-               'f_type': 'Follower',
-               'limit': limit,
-               'sort': sort,
-               'target_profile_id': target_profile_id,
-               'profile_id': profile_id
+                'equal': equal,
+                'f_type': 'Follower',
+                'limit': limit,
+                'sort': sort,
+                'target_profile_id': target_profile_id,
+                'profile_id': profile_id
              })
         return self.post(json=json)
 
@@ -308,12 +302,12 @@ class Methods:
         json = self.makeJson(
             'getProfileFollowers',
              {
-               'equal': equal,
-               'f_type': 'Following',
-               'limit': limit,
-               'sort': sort,
-               'target_profile_id': target_profile_id,
-               'profile_id': profile_id
+                'equal': equal,
+                'f_type': 'Following',
+                'limit': limit,
+                'sort': sort,
+                'target_profile_id': target_profile_id,
+                'profile_id': profile_id
              })
         return self.post(json=json)
 
@@ -322,9 +316,9 @@ class Methods:
         json = self.makeJson(
             'setBlockProfile',
              {
-               'action':'Block',
-               'blocked_id': blocked_id,
-               'profile_id': profile_id
+                'action':'Block',
+                'blocked_id': blocked_id,
+                'profile_id': profile_id
                })
         return self.post(json=json)
 
@@ -333,32 +327,8 @@ class Methods:
         json = self.makeJson(
             'setBlockProfile',
              {
-               'action': 'Unblock',
-               'blocked_id': blocked_id,
-               'profile_id': profile_id
+                'action': 'Unblock',
+                'blocked_id': blocked_id,
+                'profile_id': profile_id
                })
-        return self.post(json=json)
-
-    
-    async def _add_post(
-            self,
-            profile_id: str,
-            file: str,
-            caption: str = None,
-            file_type: str = BaseMethod.picture
-    ) -> dict:
-        result = self.uploadFile(file, profile_id, file_type)
-        json = self.makeJson('addPost', {
-            'rnd': int(random() * 1e6 + 1),
-            'width': 720,
-            'height': 720,
-            'caption': caption,
-            'file_id': result[1]['file_id'],
-            'post_type': file_type,
-            'profile_id': profile_id,
-            'hash_file_receive': result[0]['hash_file_receive'],
-            'thumbnail_file_id': result[1]['file_id'],
-            'thumbnail_hash_file_receive': result[0]['hash_file_receive'],
-            'is_multi_file': False
-            })
         return self.post(json=json)

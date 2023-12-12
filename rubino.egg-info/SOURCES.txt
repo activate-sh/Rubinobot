@@ -1,0 +1,9 @@
+LICENSE
+setup.py
+rubino/__init__.py
+rubino/client.py
+rubino/methods.py
+rubino.egg-info/PKG-INFO
+rubino.egg-info/SOURCES.txt
+rubino.egg-info/dependency_links.txt
+rubino.egg-info/top_level.txt

@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: rubino
+Version: 0.1
+Summary: none
+Home-page: https://github.com/activate-sh
+Author: Amirali Irvany
+Author-email: dev.amirali.irvany@gmail.com
+Keywords: bot,Bot,rubino,rubino,robot
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Requires-Python: ~=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE

@@ -4,4 +4,4 @@ venv/
 
 __pycache__/
 
-main.py
+rubino/main.py

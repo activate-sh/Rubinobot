@@ -1,5 +1,6 @@
 '''rubino is a simple libray for rubino-bot-selfs'''
 
+import os
 from requests import session
 from methods import Methods, randint
 
@@ -17,15 +18,22 @@ class BaseMethod:
     def url(self) -> str:
         return f'https://rubino{randint(1, 20)}.iranlms.ir/'
 
-    video: str = 'Video'
-    picture: str = 'Picture'
-
 
 class Client(BaseMethod):
 
     def __init__(self, auth: str) -> None:
         self.session = session()
         self.auth = auth
+
+    def makeJson(self, method: str, data: dict) -> dict:
+        json: dict = {
+            'api_version': '0',
+            'auth': self.auth,
+            'client': self.client,
+            'data': data,
+            'method': method
+        }
+        return json
 
 
     def post(self, **kwargs) -> dict:
@@ -43,8 +51,8 @@ class Client(BaseMethod):
         return await Methods._get_post_by_share_link(self, share_link, profile_id)
 
 
-    async def get_profile_list(self, limit: int = 10, sort: str = 'FromMax', equal: bool = False) -> dict:
-        return await Methods._get_profile_list(self, limit, sort, equal)
+    async def get_me(self, limit: int = 10, sort: str = 'FromMax', equal: bool = False) -> dict:
+        return await Methods._get_me(self, limit, sort, equal)
 
 
     async def get_profile_info(self, profile_id: str):
@@ -114,7 +122,8 @@ class Client(BaseMethod):
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        return await Methods._get_comments(self, post_id, post_profile_id, profile_id, sort, limit, equal)
+        return await Methods._get_comments(
+            self, post_id, post_profile_id, profile_id, sort, limit, equal)
 
 
     async def get_profile_posts(
@@ -204,12 +213,3 @@ class Client(BaseMethod):
     async def un_block_profile(self, profile_id: str, blocked_id: str) -> dict:
         return await Methods._un_block_profile(self, profile_id, blocked_id)
 
-
-    async def add_post(
-            self,
-            profile_id: str,
-            file: str,
-            caption: str = None,
-            file_type: str = BaseMethod.picture
-    ) -> dict:
-        return await Methods._add_post(self, profile_id, file, caption, file_type)

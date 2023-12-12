@@ -2,7 +2,8 @@
 
 import os
 from requests import session
-from methods import Methods, randint
+
+from .methods import Methods, randint
 
 
 class BaseMethod:

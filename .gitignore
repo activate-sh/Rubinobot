@@ -4,5 +4,4 @@ venv/
 
 __pycache__/
 
-test.py
-session.rbs
+main.py

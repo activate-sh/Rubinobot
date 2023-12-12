@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'rubino',
-    version = '1.2',
+    version = '1.3',
     author='Amirali Irvany',
     author_email = 'dev.amirali.irvany@gmail.com',
     description = 'none',

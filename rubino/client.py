@@ -1,8 +1,6 @@
 '''rubino is a simple libray for rubino-bot-selfs'''
 
-import os
 from requests import session
-
 from .methods import Methods, randint
 
 
@@ -26,6 +24,12 @@ class Client(BaseMethod):
         self.session = session()
         self.auth = auth
 
+    def __enter__(self) -> None:
+        return self
+
+    def __exit__(self, *args, **kwargs) -> None:
+        self.session.close()
+
     def makeJson(self, method: str, data: dict) -> dict:
         json: dict = {
             'api_version': '0',
@@ -48,16 +52,30 @@ class Client(BaseMethod):
         return await Methods._is_exist_username(self, username)
 
 
+    async def get_profile_info(self, profile_id: str):
+        return await Methods._get_profile_info(self, profile_id)
+
+
+    async def get_profile_id_by_username(self, username):
+        return await Methods._get_profile_id_by_username(self, username)
+
+
     async def get_post_by_share_link(self, share_link: str, profile_id: str = None) -> dict:
         return await Methods._get_post_by_share_link(self, share_link, profile_id)
 
 
-    async def get_me(self, limit: int = 10, sort: str = 'FromMax', equal: bool = False) -> dict:
-        return await Methods._get_me(self, limit, sort, equal)
+    async def get_me(self, profile_id: str = None) -> dict:
+        return await Methods._get_me(self, profile_id)
 
 
-    async def get_profile_info(self, profile_id: str):
-        return await Methods._get_profile_info(self, profile_id)
+    async def get_my_archive_atories(
+            self,
+            profile_id: str = None,
+            limit: int = 50,
+            sort: str = 'FromMax',
+            equal: bool = False
+    ) -> dict:
+        return await Methods._get_my_archive_atories(self, profile_id, limit, sort, equal)
 
 
     async def follow(self, followee_id: str, profile_id: str = None) -> dict:
@@ -98,7 +116,13 @@ class Client(BaseMethod):
         return await Methods._update_profile(self, **kwargs)
 
 
-    async def add_comment(self, text: str, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
+    async def add_comment(
+            self,
+            text: str,
+            post_id: str,
+            post_profile_id: str,
+            profile_id: str = None
+    ) -> dict:
         return await Methods._add_comment(self, text, post_id, post_profile_id, profile_id)
 
 
@@ -214,3 +238,26 @@ class Client(BaseMethod):
     async def un_block_profile(self, profile_id: str, blocked_id: str) -> dict:
         return await Methods._un_block_profile(self, profile_id, blocked_id)
 
+
+    async def request_upload_file(
+            self,
+            profile_id: str,
+            file_name: str,
+            file_size: int,
+            file_type: str
+    ) -> dict:
+        return await Methods._request_upload_file(self, profile_id, file_name, file_size, file_type)
+
+
+    async def upload_file(self, file: str, file_type: str, profile_id: str = None) -> dict:
+        return await Methods._upload_file(self, file, profile_id, file_type)
+
+
+    async def add_post(
+            self,
+            profile_id: str,
+            file: str,
+            caption: str = None,
+            file_type: str = 'Picture'
+    ) -> dict:
+        return await Methods._add_post(self, profile_id, file, caption, file_type)

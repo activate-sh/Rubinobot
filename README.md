@@ -1,5 +1,5 @@
 # Rubino
-### A library written in Python language to build the Robino robot using APIs
+### A developing library written in Python to build the Robino bot using apis
 
 
 ## Example

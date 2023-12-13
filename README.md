@@ -19,5 +19,5 @@ run(main())
 
 # Install
 ```bash
-pip install rubinobot
+pip install rubinobot -U
 ```

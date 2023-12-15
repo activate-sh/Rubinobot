@@ -19,5 +19,9 @@ run(main())
 
 # Install
 ```bash
+<<<<<<< HEAD
 pip install rubinobot
+=======
+pip install rubinobot -U
+>>>>>>> origin/main
 ```

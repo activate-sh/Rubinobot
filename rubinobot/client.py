@@ -1,7 +1,7 @@
 '''rubino is a simple libray for rubino-bot-selfs'''
 
+from methods import Methods, randint
 from requests import session
-from .methods import Methods, randint
 
 
 class BaseMethod:
@@ -30,7 +30,7 @@ class Client(BaseMethod):
     def __exit__(self, *args, **kwargs) -> None:
         self.session.close()
 
-    def makeJson(self, method: str, data: dict) -> dict:
+    def make_json(self, method: str, data: dict) -> dict:
         json: dict = {
             'api_version': '0',
             'auth': self.auth,
@@ -52,12 +52,12 @@ class Client(BaseMethod):
         return await Methods._is_exist_username(self, username)
 
 
-    async def get_profile_info(self, profile_id: str):
-        return await Methods._get_profile_info(self, profile_id)
+    async def get_profile_info(self, target_profile_id: str, profile_id: str = None) -> dict:
+        return await Methods._get_profile_info(self, target_profile_id, profile_id)
 
 
-    async def get_profile_id_by_username(self, username):
-        return await Methods._get_profile_id_by_username(self, username)
+    async def get_guid_by_profile_id(self, target_profile_id: str, profile_id: str = None) -> dict:
+        return await Methods._get_guid_by_profile_id(self, target_profile_id, profile_id)
 
 
     async def get_post_by_share_link(self, share_link: str, profile_id: str = None) -> dict:
@@ -91,7 +91,8 @@ class Client(BaseMethod):
             bio='',
             name='',
             username='',
-            email='',phone='',
+            email='',
+            phone='',
             website=''
             )'''
         return await Methods._create_page(self, **kwargs)
@@ -126,29 +127,29 @@ class Client(BaseMethod):
         return await Methods._add_comment(self, text, post_id, post_profile_id, profile_id)
 
 
-    async def like(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
-        return await Methods._like(self, post_id, post_profile_id, profile_id)
+    async def like(self, post_id: str, target_profile_id: str, profile_id: str = None) -> dict:
+        return await Methods._like(self, post_id, target_profile_id, profile_id)
 
 
-    async def un_like(self, post_id: str, post_profile_id: str, profile_id: str = None) -> dict:
-        return await Methods._un_like(self, post_id, post_profile_id, profile_id)
+    async def un_like(self, post_id: str, target_profile_id: str, profile_id: str = None) -> dict:
+        return await Methods._un_like(self, post_id, target_profile_id, profile_id)
 
 
-    async def view(self, post_id: str, post_profile_id: str) -> dict:
-        return await Methods._view(self, post_id, post_profile_id)
+    async def view(self, post_id: str, target_profile_id: str) -> dict:
+        return await Methods._view(self, post_id, target_profile_id)
 
 
     async def get_comments(
             self,
             post_id: str,
-            post_profile_id: str,
+            target_profile_id: str,
             profile_id: str = None,
             limit: int = 50,
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
         return await Methods._get_comments(
-            self, post_id, post_profile_id, profile_id, sort, limit, equal)
+            self, post_id, target_profile_id, profile_id, sort, limit, equal)
 
 
     async def get_profile_posts(
@@ -209,26 +210,26 @@ class Client(BaseMethod):
 
     async def get_profile_followers(
             self,
-            profile_id: str,
             target_profile_id: str,
+            profile_id: str = None,
             limit: int = 50,
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
         return await Methods._get_profile_followers(
-            self, profile_id, target_profile_id, limit, sort, equal)
+            self, target_profile_id, profile_id, limit, sort, equal)
 
 
     async def get_profile_followings(
             self,
-            profile_id: str,
             target_profile_id: str,
+            profile_id: str = None,
             limit: int = 50,
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
         return await Methods._get_profile_followings(
-            self, profile_id, target_profile_id, limit, sort, equal)
+            self, target_profile_id, profile_id, limit, sort, equal)
 
 
     async def block_profile(self, profile_id: str, blocked_id: str) -> dict:
@@ -255,9 +256,9 @@ class Client(BaseMethod):
 
     async def add_post(
             self,
-            profile_id: str,
             file: str,
             caption: str = None,
-            file_type: str = 'Picture'
+            profile_id: str = None,
+            file_type: str = 'Picture',
     ) -> dict:
         return await Methods._add_post(self, profile_id, file, caption, file_type)

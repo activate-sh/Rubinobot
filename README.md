@@ -1,5 +1,5 @@
 # Rubino
-### A developing library written in Python to build the Robino bot using apis
+### A small library for making the Robino robot 
 
 
 ## Example
@@ -19,5 +19,9 @@ run(main())
 
 # Install
 ```bash
+<<<<<<< HEAD
+pip install rubinobot
+=======
 pip install rubinobot -U
+>>>>>>> origin/main
 ```

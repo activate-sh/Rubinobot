@@ -1,5 +1,5 @@
 # Rubinobot
-### Robinobot is a library for building self-robots in Robino based on API 
+### A small library for making the Robino robot
 
 
 ## Example

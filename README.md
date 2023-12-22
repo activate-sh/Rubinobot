@@ -1,16 +1,16 @@
-# Rubino
-### A small library for making the Robino robot 
+# Rubinobot
+### Robinobot is a library for building self-robots in Robino based on API 
 
 
 ## Example
 ```python
-from rubino import Client
+from rubinobot import Client
 from asyncio import run
 
 client = Client('YOUR-AUTH')
 async def main():
-    res = await client.follow('followee_id')
-    print(res)
+    results = await client.follow('followee_id')
+    print(results)
 
 
 run(main())
@@ -19,9 +19,5 @@ run(main())
 
 # Install
 ```bash
-<<<<<<< HEAD
-pip install rubinobot
-=======
 pip install rubinobot -U
->>>>>>> origin/main
 ```

@@ -1,4 +1,4 @@
-# Rubino
+# RubinoBot
 ### A small library for making the Robino robot 
 
 
@@ -19,9 +19,5 @@ run(main())
 
 # Install
 ```bash
-<<<<<<< HEAD
-pip install rubinobot
-=======
 pip install rubinobot -U
->>>>>>> origin/main
 ```

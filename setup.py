@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'rubinobot',
-    version = '2.0',
+    version = '2.1',
     author='Amirali Irvany',
     author_email = 'dev.amirali.irvany@gmail.com',
     description = 'Robinobot is a library for building self-robots in Robino based on API',

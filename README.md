@@ -1,16 +1,16 @@
-# RubinoBot
-### A small library for making the Robino robot 
+# Rubinobot
+### A small library for making the Robino robot
 
 
 ## Example
 ```python
-from rubino import Client
+from rubinobot import Client
 from asyncio import run
 
 client = Client('YOUR-AUTH')
 async def main():
-    res = await client.follow('followee_id')
-    print(res)
+    results = await client.follow('followee_id')
+    print(results)
 
 
 run(main())

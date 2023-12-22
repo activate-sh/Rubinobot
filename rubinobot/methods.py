@@ -1,5 +1,5 @@
 from random import randint
-import os
+from os.path import getsize
 
 
 class Methods:
@@ -13,7 +13,7 @@ class Methods:
         return self.post(json=json)
 
 
-    async def _get_my_archive_atories(
+    async def _get_my_archive_stories(
             self,
             profile_id: str = None,
             limit: int = 50,
@@ -75,7 +75,7 @@ class Methods:
         json = self.make_json(
             'requestFollow',
             {
-                'f_type':'Follow',
+                'f_type': 'Follow',
                 'followee_id': followee_id,
                 'profile_id': profile_id
             })
@@ -198,7 +198,7 @@ class Methods:
             equal: bool = False
     ) -> dict:
         json = self.make_json(
-            'getRecentFollowingPosts',
+            'getProfilePosts',
             {
                 'equal': equal,
                 'limit': limit,
@@ -375,8 +375,8 @@ class Methods:
         return self.post(json=json)
 
 
-    async def _upload_file(self, file: str, profile_id: str, file_type: str) -> dict:
-        filename, filesize = file.split('/')[-1], os.path.getsize(file)
+    async def _upload_file(self, file: str, file_type: str, profile_id: str = None) -> dict:
+        filename, filesize = file.split('/')[-1], getsize(file)
         result = await self.request_upload_file(profile_id, filename, filesize, file_type)
         byte_file = open(file, 'rb').read()
         headers: dict = {
@@ -411,5 +411,25 @@ class Methods:
             'thumbnail_file_id': result[1]['file_id'],
             'thumbnail_hash_file_receive': result[0]['hash_file_receive'],
             'is_multi_file': False
+            })
+        return self.post(json=json)
+
+
+    async def _report_profile(
+            self,
+            record_id: str,
+            post_profile_id: str,
+            profile_id: str = None,
+            model: str = 'Post',
+            reason: int = 1
+    ) -> dict:
+        json = self.make_json(
+            'setReportRecord',
+            {
+                'model': model,
+                'reason': reason,
+                'record_id': record_id,
+                'post_profile_id': post_profile_id,
+                'profile_id': profile_id
             })
         return self.post(json=json)

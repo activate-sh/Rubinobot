@@ -1,6 +1,6 @@
-'''rubino is a simple libray for rubino-bot-selfs'''
+'''`Robinobot` is a library for building self-robots in Robino based on API'''
 
-from methods import Methods, randint
+from .methods import Methods, randint
 from requests import session
 
 
@@ -17,12 +17,16 @@ class BaseMethod:
     def url(self) -> str:
         return f'https://rubino{randint(1, 20)}.iranlms.ir/'
 
+    video: str = 'Video'
+    picture: str = 'Picture'
+
 
 class Client(BaseMethod):
 
-    def __init__(self, auth: str) -> None:
-        self.session = session()
+    def __init__(self, auth: str, timeout: int = 20) -> None:
         self.auth = auth
+        self.timeout = timeout
+        self.session = session()
 
     def __enter__(self) -> None:
         return self
@@ -43,7 +47,7 @@ class Client(BaseMethod):
 
     def post(self, **kwargs) -> dict:
         while True:
-            with self.session.post(self.url(), **kwargs) as res:
+            with self.session.post(self.url(), timeout=self.timeout, **kwargs) as res:
                 if res.status_code != 200: continue
                 return res.json()
 
@@ -68,14 +72,14 @@ class Client(BaseMethod):
         return await Methods._get_me(self, profile_id)
 
 
-    async def get_my_archive_atories(
+    async def get_my_archive_stories(
             self,
             profile_id: str = None,
             limit: int = 50,
             sort: str = 'FromMax',
             equal: bool = False
     ) -> dict:
-        return await Methods._get_my_archive_atories(self, profile_id, limit, sort, equal)
+        return await Methods._get_my_archive_stories(self, profile_id, limit, sort, equal)
 
 
     async def follow(self, followee_id: str, profile_id: str = None) -> dict:
@@ -179,7 +183,7 @@ class Client(BaseMethod):
 
     async def get_bookmarked_posts(
             self,
-            profile_id: str,
+            profile_id: str = None,
             limit: int = 50,
             sort: str = 'FromMax',
             equal: bool = False
@@ -189,7 +193,7 @@ class Client(BaseMethod):
 
     async def get_explore_posts(
             self,
-            profile_id: str,
+            profile_id: str = None,
             limit: int = 50,
             sort: str = 'FromMax',
             equal: bool = False,
@@ -232,12 +236,12 @@ class Client(BaseMethod):
             self, target_profile_id, profile_id, limit, sort, equal)
 
 
-    async def block_profile(self, profile_id: str, blocked_id: str) -> dict:
-        return await Methods._block_profile(self, profile_id, blocked_id)
+    async def block_profile(self, blocked_id: str, profile_id: str = None) -> dict:
+        return await Methods._block_profile(self, blocked_id, profile_id)
 
 
-    async def un_block_profile(self, profile_id: str, blocked_id: str) -> dict:
-        return await Methods._un_block_profile(self, profile_id, blocked_id)
+    async def un_block_profile(self, blocked_id: str, profile_id: str = None) -> dict:
+        return await Methods._un_block_profile(self, blocked_id, profile_id)
 
 
     async def request_upload_file(
@@ -247,11 +251,13 @@ class Client(BaseMethod):
             file_size: int,
             file_type: str
     ) -> dict:
+        '''This method is a prerequisite for the `add_post` method'''
         return await Methods._request_upload_file(self, profile_id, file_name, file_size, file_type)
 
 
     async def upload_file(self, file: str, file_type: str, profile_id: str = None) -> dict:
-        return await Methods._upload_file(self, file, profile_id, file_type)
+        '''This method is a prerequisite for the `add_post` method'''
+        return await Methods._upload_file(self, file, file_type, profile_id)
 
 
     async def add_post(
@@ -259,6 +265,18 @@ class Client(BaseMethod):
             file: str,
             caption: str = None,
             profile_id: str = None,
-            file_type: str = 'Picture',
+            file_type: str = BaseMethod.picture,
     ) -> dict:
-        return await Methods._add_post(self, profile_id, file, caption, file_type)
+        return await Methods._add_post(self, file, caption, file_type, profile_id)
+
+
+    async def report_profile(
+            self,
+            record_id: str,
+            post_profile_id: str,
+            profile_id: str = None,
+            model: str = 'Post',
+            reason: int = 1
+    ) -> dict:
+        return await Methods._report_profile(
+            self, record_id, post_profile_id, profile_id, model, reason)

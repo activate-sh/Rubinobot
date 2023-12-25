@@ -16,7 +16,7 @@ async def main():
 
 run(main())
 ```
-
+and
 ```python
 from rubinobot import Client
 from asyncio import run
